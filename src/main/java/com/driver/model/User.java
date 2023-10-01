@@ -4,9 +4,9 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
-public class User
-{
+@Table(name= "user")
+public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
@@ -14,20 +14,19 @@ public class User
     private String name;
 
     private String phoneNumber;
-
     private String password;
 
-    public User(int id, String name, String phoneNumber, String password) {
-        this.id = id;
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    List<Reservation> reservationList = new ArrayList<>();
+
+    public User() {
+    }
+
+    public User(String name, String phoneNumber, String password) {
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.password = password;
     }
-
-    public User() {}
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    List<Reservation> reservationList = new ArrayList<>();
 
     public int getId() {
         return id;
@@ -59,13 +58,5 @@ public class User
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public List<Reservation> getReservationList() {
-        return reservationList;
-    }
-
-    public void setReservationList(List<Reservation> reservationList) {
-        this.reservationList = reservationList;
     }
 }
