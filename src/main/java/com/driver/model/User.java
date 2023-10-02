@@ -4,28 +4,27 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Table(name= "user")
+@Entity
+@Table(name="user")
 public class User {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private int id;
-
     private String name;
-
     private String phoneNumber;
     private String password;
-
-    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
-    List<Reservation> reservationList = new ArrayList<>();
+    @OneToMany(mappedBy ="user",cascade =CascadeType.ALL)
+    List<Reservation> reservationList;
 
     public User() {
     }
 
-    public User(String name, String phoneNumber, String password) {
+    public User(int id, String name, String phoneNumber, String password, List<Reservation> reservationList) {
+        this.id = id;
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.password = password;
+        this.reservationList = new ArrayList<>();
     }
 
     public int getId() {
@@ -58,5 +57,13 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public List<Reservation> getReservationList() {
+        return reservationList;
+    }
+
+    public void setReservationList(List<Reservation> reservationList) {
+        this.reservationList = reservationList;
     }
 }

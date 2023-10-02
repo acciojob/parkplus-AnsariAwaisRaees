@@ -4,33 +4,31 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Table(name="spot")
+@Entity
+@Table(name ="spot")
 public class Spot {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private int id;
-
     private SpotType spotType;
-
     private int pricePerHour;
-
-    private boolean occupied;
-
+    private Boolean occupied;
     @ManyToOne
-    ParkingLot parkingLot;
+    @JoinColumn
+    private ParkingLot parkingLot;
+    @OneToMany(mappedBy="spot",cascade =CascadeType.ALL)
+    List<Reservation> reservationList;
 
-    @OneToMany(mappedBy = "spot",cascade = CascadeType.ALL)
-    List<Reservation> reservationList = new ArrayList<>();
+    public Spot() {
+    }
 
-    public Spot( SpotType spotType, int pricePerHour, boolean occupied) {
-
+    public Spot(int id, SpotType spotType, int pricePerHour, Boolean occupied, ParkingLot parkingLot, List<Reservation> reservationList) {
+        this.id = id;
         this.spotType = spotType;
         this.pricePerHour = pricePerHour;
         this.occupied = occupied;
-    }
-
-    public Spot() {
+        this.parkingLot = parkingLot;
+        this.reservationList = new ArrayList<>();
     }
 
     public int getId() {
@@ -57,11 +55,11 @@ public class Spot {
         this.pricePerHour = pricePerHour;
     }
 
-    public boolean isOccupied() {
+    public Boolean getOccupied() {
         return occupied;
     }
 
-    public void setOccupied(boolean occupied) {
+    public void setOccupied(Boolean occupied) {
         this.occupied = occupied;
     }
 
